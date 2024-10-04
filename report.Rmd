@@ -1,0 +1,6 @@
+---
+title: "BIOS 611 Data Science Project Report"
+author: "Thomas Joyce"
+date: "2024-10-04"
+output: pdf_document
+---
