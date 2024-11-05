@@ -38,6 +38,10 @@ figures/avg_annual_times.png figures/avg_times_by_gender.png figures/avg_times_b
 # hours of sunshine vs. clouds
 figures/annual_temp_trends.png figures/annual_precipitation_trends.png figures/annual_sky_conditions.png: derived_data/weather_tidied.csv weather_figures.R
 	Rscript weather_figures.R
+	
+# Create heatmap of feature correlations
+figures/correlation_heatmap.png: joined_data/runner_weather_data.csv feature_correlation_heatmap.py
+	python3 feature_correlation_heatmap.py
 
 # Write report to pdf
 report.pdf:
