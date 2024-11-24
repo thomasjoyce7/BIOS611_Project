@@ -19,3 +19,4 @@ RUN pip3 install --no-cache-dir \
 # Install R packages and TinyTeX (for LaTeX rendering)
 RUN R -e "install.packages(\"tinytex\")"
 #RUN R -e "tinytex::install_tinytex()"
+RUN R -e "install.packages('forecast', repos='http://cran.r-project.org')"
