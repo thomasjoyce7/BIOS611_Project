@@ -8,6 +8,12 @@ runner_data <- runner_data %>%
 
 print(problems(runner_data))
 
+runner_data %>% count(Year)
+print("No observations were recorded for 1978 or 1980.")
+
+runner_data %>% filter(Gender=="female") %>% count(Year)
+print("No female observations were recorded in 1976, 1978, 1980, 1994, or 2019.")
+
 runner_data %>% filter(is.na(Year))
 runner_data %>% filter(is.na(Country))
 runner_data %>% filter(is.na(Gender))
