@@ -1,6 +1,95 @@
 ---
-title: "BIOS 611 Data Science Project Report"
+title: "A Time Series Analysis of Winning Berlin Marathon Times"
+subtitle: "BIOS 611 Project Fall 2024 UNC-Chapel Hill"
 author: "Thomas Joyce"
-date: "2024-10-04"
+date: "2024-12-07"
 output: pdf_document
 ---
+
+## Introduction
+
+Thousands of athletes from around the world conquer a relatively flat yet still challenging 26.2 miles at the Berlin Marathon in late September every year. This race is considered one of the seven Abbott World Marathon Majors, along with Tokyo, Boston, London, Sydney, Berlin, Chicago, and New York. As one might expect, the Berlin Marathon not only has a highly competitive professional field, but also a rapidly expanding amateur crowd.
+
+Published publicly on Kaggle, the Berlin Marathon dataset contains finishing times and weather conditions for over 800,000 runners between 1974 and 2019. Demographic variables in the Berlin Marathon dataset include age and gender. Weather variables encompass precipitation, hours of sunshine, hours of clouds, atmospheric pressure, average temperature, minimum temperature, and maximum temperature. 
+
+While previous analyses have mainly used the Berlin Marathon dataset to investigate the impact of weather conditions on running performance, I was particularly interested in using using demographic and weather features to predict future finishing times. After performing an exploratory data analysis, of the data, I created ARIMA time series models to forecast the winning male and female times from 2021 to 2024 and compared the forecasted times to the actual results. The ARIMA models usually predicted the winning times to within 2-3 minutes of the actual value. Adding weather features to the models did not improve the performance, which was expected due to the low correlation between those features and finishing time. 
+
+## Exploratory Data Analysis
+
+Before conducting time series analysis, it was essential to obtain a general understanding of how Berlin marathon finishing times have changed over the years. I also wanted to determine which features might be useful predictors of finishing time. A variety of data visualizations were constructed to meet these objectives. 
+
+The number of runners in the Berlin Marathon increased substantially between 1974 to 2019, with over 40,000 runners in 2018 (Figure 1). This is likely due to the increasing popularity in marathons among the general population over the past half century, which coincides with progressive trends in health and fitness. 
+
+![Berlin Marathon Runners per Year](./figures/runners_per_year.png)
+
+While there has been a steady increase in the number of runners at the Berlin Marathon, average times have slowed (Figure 2). In the late 1980's, the average finishing time at the Berlin Marathon was around 3 hours and 35 minutes. However, the average finishing time was close to 4 hours and 10 minutes in the 2010's. It seems reasonable to hypothesize that the increase in runners stems from the fact that more "ordinary" people (i.e., not lifelong runners or professional athletes) are deciding to run marathons, whether that be to improve their cardiovascular health or raise money for charity. If this is the case, it makes sense that average times have slowed because new runners probably aren't too speedy over 26.2 miles. 
+
+![Berlin marathon average annual times](./figures/avg_annual_times.png)
+
+
+Another potential reason for the trend in slower average finishing times is that the proportion of middle aged runners relative to younger runners in the Berlin Marathon has increased over the years (Figure 3). We can see that the 20-29 year old age group had the highest proportion of runners in the 1980's, but towards the 2000's, the proportions of runners aged 40-64 increased substantially. 
+
+![Annual runners by age](./figures/annual_runners_by_age.png)
+
+Figure 4 shows the average Berlin Marathon finishing times by age between 1974 and 2019. We can see that older age groups generally have slower average finishing times compared to younger age groups. Hence, more older runners entering the race relative to younger runners would make the overall average finishing time slower. 
+
+![Berlin marathon average times by age](./figures/avg_times_by_age.png)
+
+Figure 5 shows the distributions of marathon times by gender aggregated across all years. We can see that there have been a lot more male finishers of the Berlin Marathon than female finishers. Both time distributions are bell-shaped and can be approximated by a normal kernel. 
+
+![Marathon time distributions](./figures/marathon_time_distributions.png)
+
+Figure 6 shows the winning Berlin Marathon times by gender between 1974 and 2019. Unlike the average finishing times, the winning times have become faster over the years. There was a significant improvement in winning times for both males and females in the early 1980's, and since then winning times have continued to improve in a gradual manner. I am particularly interested in using the Berlin Marathon dataset to predict the winning male and female times in 2021 to 2024 (there was no race in 2020 due to Covid). 
+
+![Winning times by gender](./figures/winning_times_by_gender.png)
+
+The Berlin Marathon dataset also has data for the weather conditions on the day of the race each year. Figure 7 shows the precipitation trends. Most years had little to no rain on the day of the race. However, 2010 was an outlier with about 30 mm of rain. 
+
+![Berlin Marathon Annual Precipitation trends](./figures/annual_precipitation_trends.png)
+
+Figure 8 shows the average, minimum, and maximum temperatures on the day of the Berlin Marathon each year. We can see that the average race day temperatures are usually between 50-60 degrees fahrenheit, which is quite tolerable for most runners. In recent years, the maximum temperatures have exceeded 70 degrees, which is a bit hot. Since the race usually begins around 9 or 10 am in the morning, faster runners may not experience the maximum temperatures until near the end of the race. However, runners who took over 4 hours to finish definitely had to deal with the heat in some years. 
+
+![Annual temperature trends](./figures/annual_temp_trends.png)
+
+To obtain a better understanding of how the weather and time variables in the Berlin Marathon dataset relate to one another, I created a heatmap of feature correlations (Figure 9). The correlations among weather variables are mostly what we would expect. For example, cloud hours and sunshine hours has a strong negative correlation of -0.88, while maximum temperature and sunshine hours has a moderate positive correlation of 0.66. However, most of the weather variables have weak to no correlation with finishing time (in seconds). There is a slight positive correlation between finishing time (in seconds) and year of 0.25. This makes sense because the average times have slowed over the years. 
+
+![Heatmap of Feature Correlations](./figures/correlation_heatmap.png)
+
+## Time Series Analysis for Forecasting Winning Times
+
+After exploring finishing time and weather trends in the Berlin Marathon dataset, I wanted to develop a model to predict future male and female winning times using past winning times and a subset weather covariates. Time series was a natural approach to this problem since the winning Berlin Marathon times and weather data have been recorded from 1974 to 2019 in the dataset. I decided to use the Auto-Regressive Integrated Moving Average (ARIMA) time series method from the forecast package in R due to its flexibility in model selection and potential to incorporate external regressors. ARIMA(p,d,q) includes p autoregressors to forecast future values using a linear combination of previously observed values, d differencing components to make the time series stationary, and q moving average components that leverage past errors to forecast future values. I used the auto.arima function in the forecast package to automatically select the values of p, d and q that give the best model on the training data. A random seed value was set to make the results reproducible. 
+
+I created four total ARIMA models to forecast winning Berlin Marathon times for the next five years based on the previous winning times from 1974 to 2019. However, I was only able to compare the model predictions to the actual results for four years (2021 to 2024) since the Berlin Marathon was cancelled in 2020 due to COVID. The first model just used previous male winning times to forecast winning male times for the next five years. The second model used previous male winning times AND additional covariates to forecast winning male times for the next five years. The third model used previous previous female winning times to forecast female winning times for the next five years. The fourth model used previous male winning times AND additional covariates to forecase female winning times for the next five years. The following weather features were included as covariates in the second and fourth models: precipitation, hours of sunshine, hours of clouds, and maximum temperature. 
+
+
+![ARIMA model for male winning times without covariates](./figures/male_ts.png)
+
+```{r, echo=FALSE}
+readRDS(file = "tables/male_ts_table.rds")
+```
+
+![ARIMA model for male winning times with covariates](./figures/male_ts_covariates.png)
+
+
+
+```{r, echo=FALSE}
+readRDS(file = "tables/male_ts_covariates_table.rds")
+```
+
+![ARIMA model for female winning times without covariates](./figures/female_ts.png)
+
+```{r, echo=FALSE}
+readRDS(file = "tables/female_ts_table.rds")
+```
+
+![ARIMA model for female winning times with covariates](./figures/female_ts_covariates.png)
+
+```{r, echo=FALSE}
+readRDS(file = "tables/female_ts_covariates_table.rds")
+```
+
+## References
+
+
+
+
