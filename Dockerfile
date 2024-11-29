@@ -16,7 +16,11 @@ RUN pip3 install --no-cache-dir \
     seaborn \
     matplotlib 
 
-# Install R packages and TinyTeX (for LaTeX rendering)
-RUN R -e "install.packages(\"tinytex\")"
-#RUN R -e "tinytex::install_tinytex()"
+# Install R packages
+RUN R -e "install.packages('tinytex')"
+
+# Install booktabs using existing LaTeX distribution
+RUN R -e "tinytex::tlmgr_install('booktabs')"
+
+# Install additional R packages
 RUN R -e "install.packages('forecast', repos='http://cran.r-project.org')"
