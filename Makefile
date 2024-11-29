@@ -42,14 +42,22 @@ figures/annual_temp_trends.png figures/annual_precipitation_trends.png figures/a
 # Create heatmap of feature correlations
 figures/correlation_heatmap.png: joined_data/runner_weather_data.csv feature_correlation_heatmap.py
 	python3 feature_correlation_heatmap.py
-	
+
 # Create figures for winning male time series models
 figures/male_ts.png figures/male_ts_covariates.png: derived_data/runners_tidied.csv derived_data/weather_tidied.csv male_time_series.R
 	Rscript male_time_series.R
 	
+# Create tables for winning male time series models
+tables/male_ts_table.rds tables/male_ts_covariates_table.rds: derived_data/runners_tidied.csv derived_data/weather_tidied.csv male_time_series.R
+	Rscript male_time_series.R	
+	
 # Create figures for winning female time series models
 figures/female_ts.png figures/female_ts_covariates.png: derived_data/runners_tidied.csv derived_data/weather_tidied.csv female_time_series.R
 	Rscript female_time_series.R
+
+# Create tables for winning female time series models
+tables/female_ts_table.rds tables/female_ts_covariates_table.rds: derived_data/runners_tidied.csv derived_data/weather_tidied.csv female_time_series.R
+	Rscript female_time_series.R	
 
 # Write report to pdf
 report.pdf:
