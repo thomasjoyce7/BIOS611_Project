@@ -2,6 +2,7 @@ library(forecast)
 library(readr)
 library(tidyverse)
 library(hms)
+library(knitr)
 
 runner_data <- read_csv("derived_data/runners_tidied.csv")
 
@@ -69,6 +70,27 @@ mtext("Using ARIMIA model without covariates",side=3, line=0.4)
 
 dev.off()
 
+# Create and save table comparing forecasted winning times to actual winning times
+actual_winning_times <- c(NA, "02:20:09","02:15:37","02:11:53", "02:16:42")
+actual_winning_times <- as_hms(actual_winning_times)
+
+table1_data <- data.frame(Year = c(2020, 2021, 2022, 2023, 2024), Actual = actual_winning_times, Forecast = hms(round(female_forecasted_times$mean,0)))
+
+table1_data$Error = as.numeric(table1_data$Actual) - as.numeric(table1_data$Forecast)
+table1_data$Error = hms(table1_data$Error)
+
+# Calculate MAE
+MAE <- mean(abs(as.numeric(table1_data$Error)), na.rm = TRUE)
+MAE <- hms(MAE)
+
+# Format the MAE for display in the caption
+MAE_text <- paste("(MAE =", format(MAE,"%H:%M:%S"),")")
+
+# Create the table with the caption including MAE
+table1 <- kable(table1_data, caption = paste("Comparison of actual vs. forecasted female winning times for the ARIMA model without covariates. ", MAE_text))
+
+saveRDS(table1, file = "tables/female_ts_table.rds")
+
 
 # Model with covariates ------------------------------------------------
 covariates <- as.matrix(female_ts_data[,c("PRECIP_mm","SUNSHINE_hrs","CLOUD_hrs","MAX_TEMP_F")])
@@ -115,6 +137,26 @@ mtext("Using ARIMIA model with covariates",side=3, line=0.4)
 dev.off()
 
 
+# Create and save table comparing forecasted winning times to actual winning times
+actual_winning_times <- c(NA, "02:20:09","02:15:37","02:11:53", "02:16:42")
+actual_winning_times <- as_hms(actual_winning_times)
+
+table2_data <- data.frame(Year = c(2020, 2021, 2022, 2023, 2024), Actual = actual_winning_times, Forecast = hms(round(forecast_with_covariates$mean,0)))
+
+table2_data$Error = as.numeric(table2_data$Actual) - as.numeric(table2_data$Forecast)
+table2_data$Error = hms(table2_data$Error)
+
+# Calculate MAE
+MAE2 <- round(mean(abs(as.numeric(table2_data$Error)), na.rm = TRUE),2)
+MAE2 <- hms(MAE2)
+
+# Format the MAE for display in the caption
+MAE2_text <- paste("(MAE =", format(MAE2,"%H:%M:%S"),")")
+
+# Create the table with the caption including MAE
+table2 <- kable(table2_data, caption = paste("Comparison of actual vs. forecasted female winning times for the ARIMA model with covariates. ", MAE2_text))
+
+saveRDS(table2, file = "tables/female_ts_covariates_table.rds")
 
 
 
