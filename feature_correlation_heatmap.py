@@ -14,7 +14,7 @@ correlation_matrix = heatmap_data.corr()
 
 # Create the heatmap
 plt.figure(figsize=(10, 8))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", cbar_kws={'label': 'r'})
+sns.heatmap(correlation_matrix, annot=True, cmap='Blues', fmt=".2f", cbar_kws={'label': 'r'})
 
 # Display the plot
 plt.title("Berlin Marathon Heatmap of Feature Correlations")
