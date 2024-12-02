@@ -17,7 +17,7 @@ fig1 <- ggplot(avg_annual_times, aes(x = Year, y = `Avg Time`)) +
   labs(title = "Berlin Marathon Average Finishing Times 1974 to 2019", x = "Year", y = "Average Finishing Time") +
   scale_x_continuous(breaks = seq(1974, 2019, by = 1)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6))
-ggsave("figures/avg_annual_times.png", plot=fig1, width = 9, height = 5)
+ggsave("figures/avg_annual_times.png", plot=fig1, width = 8, height = 5)
 
 
 avg_times_by_gender <- runner_data %>% group_by(Year,Gender) %>% summarize(mean(Time))
@@ -32,7 +32,7 @@ fig2 <- ggplot(avg_times_by_gender, aes(x = Year, y = `Avg Time`, color = Gender
   labs(title = "Berlin Marathon Average Annual Finishing Times by Gender", x = "Year", y = "Average Finishing Time") +
   scale_x_continuous(breaks = seq(1974, 2019, by = 1)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6))
-ggsave("figures/avg_times_by_gender.png", plot=fig2, width = 9, height = 5)
+ggsave("figures/avg_times_by_gender.png", plot=fig2, width = 8, height = 5)
 
 
 
@@ -48,7 +48,7 @@ fig3 <- ggplot(avg_times_by_age, aes(x = Year, y = `Avg Time`, color = Age, grou
   labs(title = "Berlin Marathon Average Annual Finishing Times by Age", x = "Year", y = "Average Finishing Time") +
   scale_x_continuous(breaks = seq(1974, 2019, by = 1)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6))
-ggsave("figures/avg_times_by_age.png", plot=fig3, width = 9, height = 6)
+ggsave("figures/avg_times_by_age.png", plot=fig3, width = 8, height = 6)
 
 
 
@@ -64,7 +64,7 @@ fig4 <- ggplot(winning_times, aes(x = Year, y = `Winning Time`, color = Gender, 
   labs(title = "Berlin Marathon Winning Times by Gender", x = "Year", y = "Winning Time") +
   scale_x_continuous(breaks = seq(1974, 2019, by = 1)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6))
-ggsave("figures/winning_times_by_gender.png", plot=fig4, width = 9, height = 5)
+ggsave("figures/winning_times_by_gender.png", plot=fig4, width = 8, height = 5)
 
 
 
@@ -87,6 +87,6 @@ fig5 <- ggplot(runner_data, aes(x = Time, y = after_stat(density))) +
                                             "\nSD:", as_hms(round(sd_time, 0)),
                                             "\nn =", count)),
             hjust = 1.2, vjust = 1.2, size = 3.5) 
-ggsave("figures/marathon_time_distributions.png", plot=fig5, width = 9, height = 5)
+ggsave("figures/marathon_time_distributions.png", plot=fig5, width = 8, height = 5)
 
  
