@@ -17,7 +17,7 @@ docker build . -t 611-project
 
 Then start an RStudio server by typing:
 ```
-docker run -d -e PASSWORD=<your-password> --rm -p 8787:8787 -v "$(pwd):/home/rstudio/project" -t 61
+docker run -d -e PASSWORD=<your-password> --rm -p 8787:8787 -v "$(pwd):/home/rstudio/project" -t 611
 ```
 
 Once the Rstudio server is running connect to it by visiting
