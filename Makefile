@@ -3,13 +3,19 @@
 
 init:
 	mkdir -p derived_data
+	mkdir -p joined_data
 	mkdir -p figures
+	mkdir -p tables
 
 clean:
 	rm -rf derived_data
+	rm -rf joined_data
 	rm -rf figures
+	rm -rf tables
 	mkdir -p derived_data
+	mkdir -p joined_data
 	mkdir -p figures
+	mkdir -p tables
 	
 # Create a tidied runners dataset by removing runners without times and 
 # specifying the exact ranges for each age group
@@ -60,5 +66,5 @@ tables/female_ts_table.rds tables/female_ts_covariates_table.rds: derived_data/r
 	Rscript female_time_series.R	
 
 # Write report to pdf
-report.pdf:
+report.pdf: figures/runners_per_year.png figures/avg_annual_times.png figures/annual_runners_by_age.png figures/avg_times_by_age.png figures/marathon_time_distributions.png figures/winning_times_by_gender.png figures/annual_precipitation_trends.png figures/annual_temp_trends.png figures/correlation_heatmap.png figures/male_ts.png tables/male_ts_table.rds figures/male_ts_covariates.png tables/male_ts_covariates_table.rds figures/female_ts.png tables/female_ts_table.rds figures/female_ts_covariates.png tables/female_ts_covariates_table.rds
 	R -e "rmarkdown::render(\"report.Rmd\", output_format=\"pdf_document\")"
