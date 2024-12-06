@@ -22,5 +22,5 @@ RUN R -e "install.packages('tinytex')"
 # Install booktabs using existing LaTeX distribution
 RUN R -e "tinytex::tlmgr_install('booktabs')"
 
-# Install additional R packages
+# Install additional R packages for time series analysis
 RUN R -e "install.packages('forecast', repos='http://cran.r-project.org')"
