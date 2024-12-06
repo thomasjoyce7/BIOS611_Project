@@ -94,6 +94,8 @@ saveRDS(table1, file = "tables/female_ts_table.rds")
 
 # Model with covariates ------------------------------------------------
 covariates <- as.matrix(female_ts_data[,c("PRECIP_mm","SUNSHINE_hrs","CLOUD_hrs","MAX_TEMP_F")])
+
+set.seed(123)
 model_2 <- auto.arima(female_winners_ts, xreg=covariates)  
 summary(model_2)
 

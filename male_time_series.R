@@ -51,7 +51,7 @@ plot(male_forecasted_times,
      yaxt = "n")
 
 # Get the y-axis values
-y_values <- seq(6000, 10500, by = 900)  # Retrieve default y-axis tick positions
+y_values <- seq(6000, 10500, by = 900) 
 
 # Convert y-axis values from seconds to hh:mm:ss
 hours <- y_values %/% 3600
@@ -94,6 +94,8 @@ saveRDS(table1, file = "tables/male_ts_table.rds")
 
 # Model with covariates -------------------------------------------------------------------------
 covariates <- as.matrix(male_ts_data[,c("PRECIP_mm","SUNSHINE_hrs","CLOUD_hrs","MAX_TEMP_F")])
+
+set.seed(123)
 model_2 <- auto.arima(male_winners_ts, xreg=covariates)  
 summary(model_2)
 
@@ -109,7 +111,7 @@ seconds_to_period(round(forecast_with_covariates$mean))
 
 
 # Save plot as png
-png("figures/male_ts_covariates_table.png", width=882, height=457, res=144)
+png("figures/male_ts_covariates.png", width=882, height=457, res=144)
 
 # Plot the forecast
 par(mar = c(5, 6, 4, 2) + 0.1, mgp = c(4, 1, 0))
